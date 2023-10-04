@@ -1,4 +1,4 @@
-package com.example.springboot.dao.response;
+package com.example.springboot.dto.response;
 
 import com.example.springboot.model.User;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.example.springboot.configuration;
 
-import com.example.springboot.service.UserService;
+import com.example.springboot.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,10 +26,15 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeHttpRequests(
-                        (authorize) -> authorize
+                        authorize -> authorize
                                 .requestMatchers("/jwt/**").permitAll()
-                                .requestMatchers("/admin**").hasAuthority("ADMIN")
-                                .requestMatchers("/user**").hasAuthority("USER")
+                                .requestMatchers("/house").permitAll()
+                                .requestMatchers("/house/latest").permitAll()
+                                .requestMatchers("/house/{id}").permitAll()
+                                .requestMatchers("/booking/house/{id}").permitAll()
+                                .requestMatchers("/house/{id}/related").permitAll()
+                                .requestMatchers("/webthuenha").permitAll()
+                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
                         jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

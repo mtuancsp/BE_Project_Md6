@@ -1,5 +1,7 @@
 package com.example.springboot.service.impl;
 
+import com.example.springboot.dto.response.JwtAuthenticationResponse;
+import com.example.springboot.model.User;
 import com.example.springboot.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -23,6 +25,11 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    @Override
+    public Long extractExpirationTime(String token) {
+        return extractClaim(token, Claims::getExpiration).getTime();
     }
 
     @Override
@@ -64,5 +71,16 @@ public class JwtServiceImpl implements JwtService {
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    @Override
+    public JwtAuthenticationResponse responseJWT(User user) {
+        var jwt = generateToken(user);
+
+        var response = new JwtAuthenticationResponse();
+        response.setToken(jwt);
+        response.setUser(user);
+
+        return response;
     }
 }
